@@ -5,6 +5,7 @@
 #include "llvm/Transforms/Obfuscation/Utils.h"
 #include "llvm/Transforms/Obfuscation/LegacyLowerSwitch.h"
 #include "llvm/Transforms/Obfuscation/Flattening.h"
+#include "llvm/IR/Instruction.h"
 #include <fcntl.h>
 #include <sys/stat.h>
 
@@ -126,7 +127,8 @@ bool Flattening::flatten(Function *f) {
   loopEntry = BasicBlock::Create(f->getContext(), "loopEntry", f, insert);
   loopEnd = BasicBlock::Create(f->getContext(), "loopEnd", f, insert);
 
-  load = new LoadInst(switchVar, "switchVar", loopEntry);
+  //load = new LoadInst(switchVar, "switchVar", loopEntry);
+  load = new LoadInst(switchVar->getType(), switchVar, "switchVar", loopEntry);
 
   // Move first BB on top
   insert->moveBefore(loopEntry);

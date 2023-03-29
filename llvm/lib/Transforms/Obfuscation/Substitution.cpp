@@ -212,25 +212,27 @@ void Substitution::addNeg(BinaryOperator *bo) {
 
 // Implementation of a = -(-b + (-c))
 void Substitution::addDoubleNeg(BinaryOperator *bo) {
-  BinaryOperator *op, *op2 = NULL;
-
   if (bo->getOpcode() == Instruction::Add) {
+    BinaryOperator *op, *op2, *op3;
     op = BinaryOperator::CreateNeg(bo->getOperand(0), "", bo);
     op2 = BinaryOperator::CreateNeg(bo->getOperand(1), "", bo);
-    op = BinaryOperator::Create(Instruction::Add, op, op2, "", bo);
-    op = BinaryOperator::CreateNeg(op, "", bo);
-
+    op3 = BinaryOperator::Create(Instruction::Add, op, op2, "", bo);
+    op3 = BinaryOperator::CreateNeg(op, "", bo);
+    bo->replaceAllUsesWith(op3);
     // Check signed wrap
     // op->setHasNoSignedWrap(bo->hasNoSignedWrap());
     // op->setHasNoUnsignedWrap(bo->hasNoUnsignedWrap());
   }
   else {
-    op = BinaryOperator::CreateFNeg(bo->getOperand(0), "", bo);
-    op2 = BinaryOperator::CreateFNeg(bo->getOperand(1), "", bo);
-    op = BinaryOperator::Create(Instruction::FAdd, op, op2, "", bo);
-    op = BinaryOperator::CreateFNeg(op, "", bo);
+    UnaryOperator *op, *op1, *op2;
+    BinaryOperator *op3;
+    op = UnaryOperator::CreateFNeg(bo->getOperand(0), "", bo);
+    op1 = UnaryOperator::CreateFNeg(bo->getOperand(1), "", bo);
+    op3 = BinaryOperator::Create(Instruction::FAdd, op, op2, "", bo);
+    op2 = UnaryOperator::CreateFNeg(op, "", bo);
+    bo->replaceAllUsesWith(op2);
   }
-    bo->replaceAllUsesWith(op);
+    
 
 }
 
@@ -297,7 +299,7 @@ void Substitution::addRand2(BinaryOperator *bo) {
 // Implementation of a = b + (-c)
 void Substitution::subNeg(BinaryOperator *bo) {
   BinaryOperator *op = NULL;
-
+  UnaryOperator *op1;
   if (bo->getOpcode() == Instruction::Sub) {
     op = BinaryOperator::CreateNeg(bo->getOperand(1), "", bo);
     op =
@@ -308,7 +310,7 @@ void Substitution::subNeg(BinaryOperator *bo) {
     // op->setHasNoUnsignedWrap(bo->hasNoUnsignedWrap());
   }
   else {
-    op = BinaryOperator::CreateFNeg(bo->getOperand(1), "", bo);
+    op1 = UnaryOperator::CreateFNeg(bo->getOperand(1), "", bo);
     op = BinaryOperator::Create(Instruction::FAdd, bo->getOperand(0), op, "",
                                 bo);
   }

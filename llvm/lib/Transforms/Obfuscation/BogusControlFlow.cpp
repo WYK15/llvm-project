@@ -438,6 +438,7 @@ struct BogusControlFlow : public FunctionPass {
       if (i->isBinaryOp()) { // binary instructions
         unsigned opcode = i->getOpcode();
         BinaryOperator *op, *op1 = NULL;
+        UnaryOperator *op2;
         Twine *var = new Twine("_");
         // treat differently float or int
         // Binary int
@@ -481,7 +482,7 @@ struct BogusControlFlow : public FunctionPass {
             case 0:                                    // do nothing
               break;
             case 1:
-              op = BinaryOperator::CreateFNeg(i->getOperand(0), *var, &*i);
+              op2 = UnaryOperator::CreateFNeg(i->getOperand(0), *var, &*i);
               op1 = BinaryOperator::Create(Instruction::FAdd, op,
                                            i->getOperand(1), "gen", &*i);
               break;

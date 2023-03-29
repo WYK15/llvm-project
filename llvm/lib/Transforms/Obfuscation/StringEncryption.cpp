@@ -51,6 +51,7 @@ struct StringEncryption : public ModulePass {
     }
     return true;
   } // End runOnModule
+
   void HandleFunction(Function *Func) {
     FixFunctionConstantExpr(Func);
     set<GlobalVariable *> Globals;
@@ -78,7 +79,7 @@ struct StringEncryption : public ModulePass {
           GV->getSection().find(StringRef("__objc")) == string::npos &&
           GV->getName().find("OBJC") == string::npos) {
         if (GV->getInitializer()->getType() ==
-            Func->getParent()->getTypeByName("struct.__NSConstantString_tag")) {
+            StructType::getTypeByName(GV->getContext(),"struct.__NSConstantString_tag")) {
           objCStrings.insert(GV);
           rawStrings.insert(
               cast<GlobalVariable>(cast<ConstantStruct>(GV->getInitializer())
