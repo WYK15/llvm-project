@@ -89,6 +89,8 @@
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include "llvm/Transforms/Utils/NameAnonGlobals.h"
 #include "llvm/Transforms/Utils/SymbolRewriter.h"
+#include "llvm/Transforms/Obfuscator/Flatten.h"
+#include "llvm/Transforms/Utils/HelloWorld.h"
 #include <memory>
 using namespace clang;
 using namespace llvm;
@@ -625,6 +627,10 @@ static OptimizationLevel mapToLevel(const CodeGenOptions &Opts) {
 static void addSanitizers(const Triple &TargetTriple,
                           const CodeGenOptions &CodeGenOpts,
                           const LangOptions &LangOpts, PassBuilder &PB) {
+  PB.registerScalarOptimizerLateEPCallback([&](FunctionPassManager &FPM, OptimizationLevel level){
+    FPM.addPass(FlattenPass());
+  });
+
   PB.registerOptimizerLastEPCallback([&](ModulePassManager &MPM,
                                          OptimizationLevel Level) {
     if (CodeGenOpts.hasSanitizeCoverage()) {
