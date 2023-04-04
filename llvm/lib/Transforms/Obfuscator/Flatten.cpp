@@ -20,16 +20,15 @@ using namespace std;
 static cl::opt<bool> flatten("enable-cffobf", cl::desc("flatten pass switch"), cl::init(false));
 
 PreservedAnalyses FlattenPass::run(Function &F, FunctionAnalysisManager &AM) {
-	Function *tmp = &F;
-	doFlatten(tmp);
+	if (flatten)
+	{
+		Function *tmp = &F;
+		doFlatten(tmp);
+	}
 	return PreservedAnalyses::all(); 
 }
 
 bool FlattenPass::doFlatten(Function *f) {
-	if (!flatten) {
-		//errs() << "[+] flatten off\n";
-		return false;
-	}
 	vector<BasicBlock *> origBB;
 	BasicBlock *loopEntry;
 	BasicBlock *loopEnd;

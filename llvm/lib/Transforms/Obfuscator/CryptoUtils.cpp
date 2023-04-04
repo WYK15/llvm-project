@@ -16,6 +16,7 @@
 #include <fstream>
 #include <string>
 #include <chrono>
+#include <random>
 
 using namespace llvm;
 namespace llvm {
@@ -57,11 +58,10 @@ std::uint_fast64_t CryptoUtils::get_raw(){
   return (*eng)();
 }
 uint32_t CryptoUtils::get_range(uint32_t min,uint32_t max) {
-  if(max==0){
-    return 0;
-  }
-  std::uniform_int_distribution<uint32_t> dis(min, max-1);
-  return dis(*eng);
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<uint32_t> dist(min, max);
+  return dist(gen);
 }
 
 void CryptoUtils::get_bytes(char *buffer, const int len) {

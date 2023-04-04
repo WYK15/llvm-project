@@ -90,6 +90,7 @@
 #include "llvm/Transforms/Utils/NameAnonGlobals.h"
 #include "llvm/Transforms/Utils/SymbolRewriter.h"
 #include "llvm/Transforms/Obfuscator/Flatten.h"
+#include "llvm/Transforms/Obfuscator/BogusControlFlow.h"
 #include "llvm/Transforms/Utils/HelloWorld.h"
 #include <memory>
 using namespace clang;
@@ -628,6 +629,7 @@ static void addSanitizers(const Triple &TargetTriple,
                           const CodeGenOptions &CodeGenOpts,
                           const LangOptions &LangOpts, PassBuilder &PB) {
   PB.registerScalarOptimizerLateEPCallback([&](FunctionPassManager &FPM, OptimizationLevel level){
+    FPM.addPass(BogusControlFlowPass());
     FPM.addPass(FlattenPass());
   });
 
