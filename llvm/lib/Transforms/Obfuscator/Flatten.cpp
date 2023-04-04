@@ -12,9 +12,12 @@
 #include "llvm/Transforms/Utils/Local.h" // For DemoteRegToStack and DemotePHIToStack
 #include "llvm/Transforms/IPO.h"
 #include "llvm/Transforms/Scalar.h"
+#include "llvm/Support/CommandLine.h"
 
 using namespace llvm; 
 using namespace std;
+
+static cl::opt<bool> flatten("enable-cffobf", cl::desc("flatten pass switch"), cl::init(false));
 
 PreservedAnalyses FlattenPass::run(Function &F, FunctionAnalysisManager &AM) {
 	Function *tmp = &F;
@@ -23,7 +26,10 @@ PreservedAnalyses FlattenPass::run(Function &F, FunctionAnalysisManager &AM) {
 }
 
 bool FlattenPass::doFlatten(Function *f) {
-	//errs() << F.getName() << "\n";
+	if (!flatten) {
+		//errs() << "[+] flatten off\n";
+		return false;
+	}
 	vector<BasicBlock *> origBB;
 	BasicBlock *loopEntry;
 	BasicBlock *loopEnd;
@@ -208,8 +214,8 @@ bool FlattenPass::doFlatten(Function *f) {
       continue;
     }
   }
-  errs()<<"Fixing Stack\n";
+  //errs()<<"Fixing Stack\n";
   fixStack(f);
-  errs()<<"Fixed Stack\n";
+  //errs()<<"Fixed Stack\n";
   return true;
 }
