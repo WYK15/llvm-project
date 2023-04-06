@@ -251,6 +251,8 @@
 #include "llvm/Transforms/Vectorize/VectorCombine.h"
 #include "llvm/Transforms/Obfuscator/Flatten.h"
 #include "llvm/Transforms/Obfuscator/BogusControlFlow.h"
+#include "llvm/Transforms/Obfuscator/Substitute.h"
+#include "llvm/Transforms/Obfuscator/StringEncrypt.h"
 
 using namespace llvm;
 

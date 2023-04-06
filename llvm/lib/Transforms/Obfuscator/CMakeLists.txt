@@ -4,6 +4,8 @@ BogusControlFlow.cpp
 CryptoUtils.cpp
 Utils.cpp
 LegacyLowerSwitch.cpp
+Substitute.cpp
+StringEncrypt.cpp
 
 ADDITIONAL_HEADER_DIRS
 ${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms
