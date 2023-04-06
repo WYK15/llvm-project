@@ -36,32 +36,37 @@ if ! [ -d $header_dic ]; then
   mkdir -p $header_dic
 fi
 
-if ! [ -e $CMakeLists_file ]; then
-  touch $CMakeLists_file
-fi
 
 # add obfuscator directory to cmakelist
 echo -e "add_subdirectory(${obfuscator_dic_name})\n" $transform_cmake_list
 
 # code cmakelist.txt
-echo -e 'add_llvm_component_library(LLVMObfuscator\n' >> $CMakeLists_file
-echo -e $passname >> $CMakeLists_file
-echo -e '\n' >> $CMakeLists_file
+if ! [ -e $CMakeLists_file ]; then
+  touch $CMakeLists_file
 
-echo -e 'ADDITIONAL_HEADER_DIRS\n' >> $CMakeLists_file
-echo -e '${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms\n' >> $CMakeLists_file
-echo -e '${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms/Utils\n' >> $CMakeLists_file
-echo -e '\n' >> $CMakeLists_file
+  # content
+  echo -e 'add_llvm_component_library(LLVMObfuscator\n' >> $CMakeLists_file
+  echo -e $passname >> $CMakeLists_file
+  echo -e '\n' >> $CMakeLists_file
 
-echo -e 'DEPENDS\n' >> $CMakeLists_file
-echo -e 'intrinsics_gen\n' >> $CMakeLists_file
+  echo -e 'ADDITIONAL_HEADER_DIRS\n' >> $CMakeLists_file
+  echo -e '${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms\n' >> $CMakeLists_file
+  echo -e '${LLVM_MAIN_INCLUDE_DIR}/llvm/Transforms/Utils\n' >> $CMakeLists_file
+  echo -e '\n' >> $CMakeLists_file
 
-echo -e 'LINK_COMPONENTS\n' >> $CMakeLists_file
-echo -e 'Analysis\n' >> $CMakeLists_file
-echo -e 'Core\n' >> $CMakeLists_file
-echo -e 'Support\n' >> $CMakeLists_file
+  echo -e 'DEPENDS\n' >> $CMakeLists_file
+  echo -e 'intrinsics_gen\n' >> $CMakeLists_file
 
-echo -e ')\n' >> $CMakeLists_file
+  echo -e 'LINK_COMPONENTS\n' >> $CMakeLists_file
+  echo -e 'Analysis\n' >> $CMakeLists_file
+  echo -e 'Core\n' >> $CMakeLists_file
+  echo -e 'Support\n' >> $CMakeLists_file
+
+  echo -e ')\n' >> $CMakeLists_file
+
+fi
+
+# add .cpp to cmake list
 
 
 # code .h
@@ -78,6 +83,7 @@ echo -e "  class ${passname}Pass : public PassInfoMixin<${passname}Pass> { \n" >
 
 echo -e '   public: \n' >> $header_file_path
 echo -e '   PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM); \n' >> $header_file_path
+echo -e '   static bool isRequired() { return true; } \n' >> $header_file_path
 
 echo -e '  };\n' >> $header_file_path
 echo -e '} \n' >> $header_file_path
@@ -89,7 +95,7 @@ echo -e '#endif  \n' >> $header_file_path
 rm -rf $cpp_file_path
 touch $cpp_file_path
 
-echo -e '#include \"$header_file_path\"' >> $cpp_file_path
+echo -e '#include "${header_file_path}"' >> $cpp_file_path
 echo -e 'using namespace llvm; \n' >> $cpp_file_path
 echo -e "PreservedAnalyses ${passname}Pass::run(Function &F, FunctionAnalysisManager &AM) { \n"  >> $cpp_file_path
 echo -e 'errs() << F.getName(); \n' >> $cpp_file_path
@@ -112,7 +118,7 @@ sed -i '' "20a\
 
 
 # 在llvm-project/clang/lib/CodeGen/BackendUtil.cpp的addSanitizers()中，调用PM.registerxxxx方法注册
-# TODO: 添加进入cpp的addSanitizers方法中
+# TODO: 添加进入cpp的 addSanitizers 方法中
 
 # PB.registerScalarOptimizerLateEPCallback([&](FunctionPassManager &FPM, OptimizationLevel level){
 #   FPM.addPass(FlattenPass());
