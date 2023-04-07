@@ -87,7 +87,7 @@ PreservedAnalyses BogusControlFlowPass::run(Function &F, FunctionAnalysisManager
       doF(*F.getParent());
       return PreservedAnalyses::none();
   }
-	return PreservedAnalyses::all(); 
+	return PreservedAnalyses::none(); 
 }
 
 bool BogusControlFlowPass::doBcf(Function &F) {
@@ -328,7 +328,6 @@ BasicBlock *BogusControlFlowPass::createAlteredBasicBlock(BasicBlock *basicBlock
       if (i->isBinaryOp()) { // binary instructions
         unsigned opcode = i->getOpcode();
         BinaryOperator *op, *op1 = NULL;
-        UnaryOperator *op2;
         Twine *var = new Twine("_");
         // treat differently float or int
         // Binary int
@@ -372,9 +371,9 @@ BasicBlock *BogusControlFlowPass::createAlteredBasicBlock(BasicBlock *basicBlock
             case 0:                                    // do nothing
               break;
             case 1:
-              op2 = UnaryOperator::CreateFNeg(i->getOperand(0), *var, &*i);
-              op1 = BinaryOperator::Create(Instruction::FAdd, op,
-                                           i->getOperand(1), "gen", &*i);
+              // op2 = UnaryOperator::CreateFNeg(i->getOperand(0), *var, &*i);
+              // op1 = BinaryOperator::Create(Instruction::FAdd, op,
+              //                              i->getOperand(1), "gen", &*i);
               break;
             case 2:
               op = BinaryOperator::Create(Instruction::FSub, i->getOperand(0),

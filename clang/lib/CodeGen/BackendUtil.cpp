@@ -631,9 +631,9 @@ static void addSanitizers(const Triple &TargetTriple,
                           const CodeGenOptions &CodeGenOpts,
                           const LangOptions &LangOpts, PassBuilder &PB) {
   PB.registerScalarOptimizerLateEPCallback([&](FunctionPassManager &FPM, OptimizationLevel level){
+    FPM.addPass(SubstitutePass());
     FPM.addPass(BogusControlFlowPass());
     FPM.addPass(FlattenPass());
-    FPM.addPass(SubstitutePass());
     FPM.addPass(StringEncryptionPass());
   });
 

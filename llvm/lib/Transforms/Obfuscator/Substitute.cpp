@@ -181,7 +181,6 @@ void SubstitutePass::addNeg(BinaryOperator *bo) {
 
 // Implementation of a = -(-b + (-c))
 void SubstitutePass::addDoubleNeg(BinaryOperator *bo) {
-
   if (bo->getOpcode() == Instruction::Add) {
     BinaryOperator *op = BinaryOperator::CreateNeg(bo->getOperand(0), "", bo);
     BinaryOperator *op2 = BinaryOperator::CreateNeg(bo->getOperand(1), "", bo);
@@ -194,17 +193,7 @@ void SubstitutePass::addDoubleNeg(BinaryOperator *bo) {
     // op->setHasNoSignedWrap(bo->hasNoSignedWrap());
     // op->setHasNoUnsignedWrap(bo->hasNoUnsignedWrap());
   }
-  else {
-    UnaryOperator *op = UnaryOperator::CreateFNeg(bo->getOperand(0), "", bo); // -b
-    UnaryOperator *op2 = UnaryOperator::CreateFNeg(bo->getOperand(1), "", bo); // -c
-    BinaryOperator *addop = BinaryOperator::Create(Instruction::FAdd, op, op2, "", bo); // -b + (-c)
-    UnaryOperator *finalOp = UnaryOperator::CreateFNeg(addop, "", bo); // - (-b + (-c))
-
-    bo->replaceAllUsesWith(finalOp);
-  }
-    
-
-}
+}    
 
 // Implementation of  r = rand (); a = b + r; a = a + c; a = a - r
 void SubstitutePass::addRand(BinaryOperator *bo) {
@@ -226,14 +215,6 @@ void SubstitutePass::addRand(BinaryOperator *bo) {
 
     bo->replaceAllUsesWith(op);
   }
-  /* else {
-      Type *ty = bo->getType();
-      ConstantFP *co =
-  (ConstantFP*)ConstantFP::get(ty,(float)llvm::cryptoutils->get_uint64_t());
-      op = BinaryOperator::Create(Instruction::FAdd,bo->getOperand(0),co,"",bo);
-      op = BinaryOperator::Create(Instruction::FAdd,op,bo->getOperand(1),"",bo);
-      op = BinaryOperator::Create(Instruction::FSub,op,co,"",bo);
-  } */
 }
 
 // Implementation of r = rand (); a = b - r; a = a + b; a = a + r
@@ -256,14 +237,6 @@ void SubstitutePass::addRand2(BinaryOperator *bo) {
 
     bo->replaceAllUsesWith(op);
   }
-  /* else {
-      Type *ty = bo->getType();
-      ConstantFP *co =
-  (ConstantFP*)ConstantFP::get(ty,(float)llvm::cryptoutils->get_uint64_t());
-      op = BinaryOperator::Create(Instruction::FAdd,bo->getOperand(0),co,"",bo);
-      op = BinaryOperator::Create(Instruction::FAdd,op,bo->getOperand(1),"",bo);
-      op = BinaryOperator::Create(Instruction::FSub,op,co,"",bo);
-  } */
 }
 
 // Implementation of a = b + (-c)
@@ -278,13 +251,8 @@ void SubstitutePass::subNeg(BinaryOperator *bo) {
     // Check signed wrap
     // op->setHasNoSignedWrap(bo->hasNoSignedWrap());
     // op->setHasNoUnsignedWrap(bo->hasNoUnsignedWrap());
-  }
-  else {
-    UnaryOperator *op1 = UnaryOperator::CreateFNeg(bo->getOperand(1), "", bo);
-    op = BinaryOperator::Create(Instruction::FAdd, bo->getOperand(0), op1, "",
-                                bo);
-  }
-  bo->replaceAllUsesWith(op);
+    bo->replaceAllUsesWith(op);
+  } 
 }
 
 // Implementation of  r = rand (); a = b + r; a = a - c; a = a - r
@@ -307,14 +275,6 @@ void SubstitutePass::subRand(BinaryOperator *bo) {
 
     bo->replaceAllUsesWith(op);
   }
-  /* else {
-      Type *ty = bo->getType();
-      ConstantFP *co =
-  (ConstantFP*)ConstantFP::get(ty,(float)llvm::cryptoutils->get_uint64_t());
-      op = BinaryOperator::Create(Instruction::FAdd,bo->getOperand(0),co,"",bo);
-      op = BinaryOperator::Create(Instruction::FSub,op,bo->getOperand(1),"",bo);
-      op = BinaryOperator::Create(Instruction::FSub,op,co,"",bo);
-  } */
 }
 
 // Implementation of  r = rand (); a = b - r; a = a - c; a = a + r
@@ -337,14 +297,6 @@ void SubstitutePass::subRand2(BinaryOperator *bo) {
 
     bo->replaceAllUsesWith(op);
   }
-  /* else {
-      Type *ty = bo->getType();
-      ConstantFP *co =
-  (ConstantFP*)ConstantFP::get(ty,(float)llvm::cryptoutils->get_uint64_t());
-      op = BinaryOperator::Create(Instruction::FSub,bo->getOperand(0),co,"",bo);
-      op = BinaryOperator::Create(Instruction::FSub,op,bo->getOperand(1),"",bo);
-      op = BinaryOperator::Create(Instruction::FAdd,op,co,"",bo);
-  } */
 }
 
 // Implementation of a = b & c => a = (b^~c)& b
