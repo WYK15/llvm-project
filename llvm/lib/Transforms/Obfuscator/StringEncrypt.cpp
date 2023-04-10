@@ -29,6 +29,7 @@ PreservedAnalyses StringEncryptionPass::run(Function &F, FunctionAnalysisManager
 	if (stringEncrypt) {
 		Function *f = &F;
 		HandleFunction(f);
+    return PreservedAnalyses::none(); 
 	}
 
 	return PreservedAnalyses::all(); 
@@ -282,7 +283,8 @@ GlobalVariable *StringEncryptionPass::ObjectivCString(GlobalVariable *GV, string
       vector<Constant *> vals;
       vals.push_back(CS->getOperand(0));
       vals.push_back(CS->getOperand(1));
-      Constant *GEPed = ConstantExpr::getInBoundsGetElementPtr(nullptr, newString, {zero, zero});
+      Type *PointeeType = newString->getType()->getScalarType()->getPointerElementType();
+      Constant *GEPed = ConstantExpr::getInBoundsGetElementPtr(PointeeType, newString, {zero, zero});
       if (GEPed->getType() == CS->getOperand(2)->getType()) {
         vals.push_back(GEPed);
       } else {
