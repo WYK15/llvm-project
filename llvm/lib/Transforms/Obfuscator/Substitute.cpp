@@ -68,11 +68,13 @@ SubstitutePass::SubstitutePass() {
 
 // entry
 PreservedAnalyses SubstitutePass::run(Function &F, FunctionAnalysisManager &AM) {
+  return PreservedAnalyses::all(); //暂时关闭指令替换功能
 	if (sub)
 	{
-		//errs() << "run SubstitutePass on : " << F.getName() << "\n";
+		errs() << "run SubstitutePass on : " << F.getName() << "\n";
 		 Function *tmp = &F;
 		doSubstitute(tmp);
+    return PreservedAnalyses::none();
 	}
 	return PreservedAnalyses::all();
 }
