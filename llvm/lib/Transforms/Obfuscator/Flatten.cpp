@@ -24,8 +24,9 @@ PreservedAnalyses FlattenPass::run(Function &F, FunctionAnalysisManager &AM) {
 	{
 		Function *tmp = &F;
 		doFlatten(tmp);
+    return PreservedAnalyses::none(); 
 	}
-	return PreservedAnalyses::none(); 
+	return PreservedAnalyses::all(); 
 }
 
 bool FlattenPass::doFlatten(Function *f) {
