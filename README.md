@@ -6,6 +6,16 @@ branching scheme, please see
 
 The LLVM project's main README follows.
 
+# 混淆参数
+
+- -mllvm -enable-bcfobf 启用伪控制流
+- -mllvm -enable-cffobf 启用控制流平坦化
+- -mllvm -enable-strcry 启用字符串加密
+
+
+
+
+
 # The LLVM Compiler Infrastructure
 
 This directory and its sub-directories contain the source code for LLVM,
