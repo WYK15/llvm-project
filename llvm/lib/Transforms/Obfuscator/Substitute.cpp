@@ -68,7 +68,6 @@ SubstitutePass::SubstitutePass() {
 
 // entry
 PreservedAnalyses SubstitutePass::run(Function &F, FunctionAnalysisManager &AM) {
-  return PreservedAnalyses::all(); //暂时关闭指令替换功能
 	if (sub)
 	{
 		errs() << "run SubstitutePass on : " << F.getName() << "\n";
@@ -103,14 +102,14 @@ bool SubstitutePass::doSubstitute(Function *f) {
             case BinaryOperator::Add:
               // case BinaryOperator::FAdd:
               // Substitute with random add operation
-              (this->*funcAdd[llvm::cryptoutils->get_range(NUMBER_ADD_SUBST)])(
+              (this->*funcAdd[llvm::cryptoutils->get_range(1)])(
                   cast<BinaryOperator>(inst));
               ++Add;
               break;
             case BinaryOperator::Sub:
               // case BinaryOperator::FSub:
               // Substitute with random sub operation
-              (this->*funcSub[llvm::cryptoutils->get_range(NUMBER_SUB_SUBST)])(
+              (this->*funcSub[llvm::cryptoutils->get_range(1)])(
                   cast<BinaryOperator>(inst));
               ++Sub;
               break;
@@ -138,17 +137,17 @@ bool SubstitutePass::doSubstitute(Function *f) {
               //++Shi;
               break;
             case Instruction::And:
-              (this->*funcAnd[llvm::cryptoutils->get_range(2)])(
+              (this->*funcAnd[llvm::cryptoutils->get_range(1)])(
                   cast<BinaryOperator>(inst));
               ++And;
               break;
             case Instruction::Or:
-              (this->*funcOr[llvm::cryptoutils->get_range(2)])(
+              (this->*funcOr[llvm::cryptoutils->get_range(1)])(
                   cast<BinaryOperator>(inst));
               ++Or;
               break;
             case Instruction::Xor:
-              (this->*funcXor[llvm::cryptoutils->get_range(2)])(
+              (this->*funcXor[llvm::cryptoutils->get_range(1)])(
                   cast<BinaryOperator>(inst));
               ++Xor;
               break;
