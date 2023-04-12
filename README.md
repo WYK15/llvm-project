@@ -11,7 +11,9 @@ The LLVM project's main README follows.
 - -mllvm -enable-bcfobf 启用伪控制流
 - -mllvm -enable-cffobf 启用控制流平坦化
 - -mllvm -enable-strcry 启用字符串加密
-
+- -mllvm -enable-hideGVobf 启用全局变量隐藏
+- -mllvm -enable-hidecallobf 启用方法调用隐藏
+- -mllvm -enable-hidebrobf 启用方法跳转隐藏
 
 
 
