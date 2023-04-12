@@ -70,7 +70,6 @@ SubstitutePass::SubstitutePass() {
 PreservedAnalyses SubstitutePass::run(Function &F, FunctionAnalysisManager &AM) {
 	if (sub)
 	{
-		errs() << "run SubstitutePass on : " << F.getName() << "\n";
 		 Function *tmp = &F;
 		doSubstitute(tmp);
     return PreservedAnalyses::none();
