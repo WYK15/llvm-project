@@ -93,6 +93,7 @@
 #include "llvm/Transforms/Obfuscator/BogusControlFlow.h"
 #include "llvm/Transforms/Obfuscator/Substitute.h"
 #include "llvm/Transforms/Obfuscator/StringEncrypt.h"
+#include "llvm/Transforms/Obfuscator/IndireactCall.h"
 #include "llvm/Transforms/Utils/HelloWorld.h"
 #include <memory>
 using namespace clang;
@@ -635,6 +636,7 @@ static void addSanitizers(const Triple &TargetTriple,
     FPM.addPass(BogusControlFlowPass());
     FPM.addPass(FlattenPass());
     FPM.addPass(StringEncryptionPass());
+    FPM.addPass(IndireactCallPass());
   });
 
   PB.registerOptimizerLastEPCallback([&](ModulePassManager &MPM,

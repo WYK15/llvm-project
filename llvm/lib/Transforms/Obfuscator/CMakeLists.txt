@@ -1,5 +1,6 @@
 add_llvm_component_library(LLVMObfuscator
 Flatten.cpp
+IndireactCall.cpp
 BogusControlFlow.cpp
 CryptoUtils.cpp
 Utils.cpp
