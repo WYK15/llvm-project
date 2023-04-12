@@ -9,7 +9,7 @@
 using namespace llvm; 
 using namespace std;
 
-static cl::opt<bool> hidecall("enable-hidecallobf", cl::desc("bcf pass switch"), cl::init(false));
+static cl::opt<bool> hidecall("enable-hidecallobf", cl::desc("hidecallobf pass switch"), cl::init(false));
 
 PreservedAnalyses IndireactCallPass::run(Function &F, FunctionAnalysisManager &AM) {
     if (hidecall) {
