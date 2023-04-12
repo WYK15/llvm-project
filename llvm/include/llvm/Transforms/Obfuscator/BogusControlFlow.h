@@ -13,7 +13,7 @@ namespace llvm {
             bool doBcf(Function &F);
 			void addBogusFlow(BasicBlock *basicBlock, Function &F);
 			bool doF(Module &M);
-			virtual BasicBlock *createAlteredBasicBlock(BasicBlock *basicBlock,
+			BasicBlock *createAlteredBasicBlock(BasicBlock *basicBlock,
                                               const Twine &Name,
                                               Function *F);
     };
