@@ -95,6 +95,7 @@
 #include "llvm/Transforms/Obfuscator/StringEncrypt.h"
 #include "llvm/Transforms/Obfuscator/IndireactCall.h"
 #include "llvm/Transforms/Obfuscator/IndirectBr.h"
+#include "llvm/Transforms/Obfuscator/IndireactGlobalVariable.h"
 #include "llvm/Transforms/Utils/HelloWorld.h"
 #include <memory>
 using namespace clang;
@@ -639,6 +640,7 @@ static void addSanitizers(const Triple &TargetTriple,
     FPM.addPass(StringEncryptionPass());
     FPM.addPass(IndireactCallPass());
     FPM.addPass(IndirectBrPass());
+    FPM.addPass(IndireactGlobalVariablePass());
   });
 
   PB.registerOptimizerLastEPCallback([&](ModulePassManager &MPM,
