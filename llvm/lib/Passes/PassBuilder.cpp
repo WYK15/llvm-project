@@ -18,6 +18,7 @@
 #include "llvm/ADT/StringSwitch.h"
 #include "llvm/Analysis/AliasAnalysisEvaluator.h"
 #include "llvm/Analysis/AliasSetTracker.h"
+#include "llvm/Transforms/Obfuscator/IndirectBr.h"
 #include "llvm/Transforms/Obfuscator/IndireactCall.h"
 #include "llvm/Analysis/AssumptionCache.h"
 #include "llvm/Analysis/BasicAliasAnalysis.h"
