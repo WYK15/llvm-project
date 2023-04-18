@@ -9,6 +9,13 @@ The LLVM project's main README follows.
 # 混淆参数
 
 - -mllvm -enable-bcfobf 启用伪控制流
+  - -mllvm -bcf_prob=70, 指定每个基础块被混淆的可能性, 值介于 [0 , 100]
+  - -mllvm -bcf_loop=1, 指定为控制流在每个函数上作用的次数。
+  - -mllvm -bcf_cond_compl=3，指定产生分支时，每个表达式的复杂度
+- -mllvm -enable-subobf 启用指令替换
+  - -mllvm -sub_prob=50，指定在每个基础块上，指令替换生效的可能性,, 值介于 [0 , 100]
+  - -mllvm -sub_loop=1，指定指令替换在一个函数上作用的次数
+
 - -mllvm -enable-cffobf 启用控制流平坦化
 - -mllvm -enable-strcry 启用字符串加密
 - -mllvm -enable-hideGVobf 启用全局变量隐藏
